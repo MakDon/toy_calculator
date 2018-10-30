@@ -38,5 +38,27 @@ class demoTest(unittest.TestCase):
         question = "1+2*(3+5)+4"
         self.assertEqual(calculator.calculate(question), eval(question))
 
+    def test_calculate8(self):
+        question = "1+2*(3+5+4"
+        try:
+            calculator.calculate(question)
+        except ValueError as e:
+            self.assertEqual(e.args[0], "Error Grammar")
+
+
+    def test_calculate8(self):
+        question = "1+2(3+5)+4"
+        try:
+            calculator.calculate(question)
+        except ValueError as e:
+            self.assertEqual(e.args[0], "Error Grammar")
+
+    def test_calculate8(self):
+        question = "1+2*(3+5)+"
+        try:
+            calculator.calculate(question)
+        except ValueError as e:
+            self.assertEqual(e.args[0], "Error Grammar")
+
 if __name__=='__main__':
      unittest.main()

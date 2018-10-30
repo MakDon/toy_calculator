@@ -2,10 +2,10 @@ import re
 
 
 operator = {
-        "+":lambda a,b:a+b,
-        "-":lambda a,b:a-b,
-        "*":lambda a,b:a*b,
-        "/":lambda a,b:a/b
+        "+": lambda a, b: a+b,
+        "-": lambda a, b: a-b,
+        "*": lambda a, b: a*b,
+        "/": lambda a, b: a/b
     }
 
 
@@ -23,12 +23,11 @@ class VM:
     def calculate(self, opcode):
         a = self.pop()
         b = self.pop()
-        result = operator[opcode](b,a)
+        result = operator[opcode](b, a)
         self.push(result)
 
     def clear(self):
         self.stack.clear()
-
 
     def run(self, instructions):
         self.clear()
