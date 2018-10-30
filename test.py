@@ -5,7 +5,7 @@ from calculator import Calculator
 calculator = Calculator()
 
 
-class demoTest(unittest.TestCase):
+class TestCalculator(unittest.TestCase):
     def test_calculate0(self):
         question = "1+2+3"
         self.assertEqual(calculator.calculate(question), eval(question))
@@ -45,15 +45,14 @@ class demoTest(unittest.TestCase):
         except ValueError as e:
             self.assertEqual(e.args[0], "Error Grammar")
 
-
-    def test_calculate8(self):
+    def test_calculate9(self):
         question = "1+2(3+5)+4"
         try:
             calculator.calculate(question)
         except ValueError as e:
             self.assertEqual(e.args[0], "Error Grammar")
 
-    def test_calculate8(self):
+    def test_calculate10(self):
         question = "1+2*(3+5)+"
         try:
             calculator.calculate(question)

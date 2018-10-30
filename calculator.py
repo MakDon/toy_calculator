@@ -19,7 +19,3 @@ class Calculator:
         result = self.vm.run(ins)
         return result
 
-
-if __name__ == '__main__':
-    calculator = Calculator()
-    print(calculator.calculate("1+2*(3+5+4"))

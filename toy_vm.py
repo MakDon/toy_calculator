@@ -43,7 +43,8 @@ class VM:
             return self.stack[0]
         elif len(self.stack) == 0:
             raise ValueError("empty stack")
-        elif len(self.stack) >1 :
+        elif len(self.stack) > 1:
             raise ValueError("more than 1 element in the stack")
+
 
 vm = VM()

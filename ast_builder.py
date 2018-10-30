@@ -1,10 +1,6 @@
 import re
-operator = {
-        "+": lambda a, b: a+b,
-        "-": lambda a, b: a-b,
-        "*": lambda a, b: a*b,
-        "/": lambda a, b: a/b
-    }
+
+
 """
 Expr      ->    Term ExprTail
 ExprTail  ->    + Term ExprTail
@@ -20,7 +16,6 @@ Factor    ->    (Expr)
           |     num
 reference:https://zhuanlan.zhihu.com/p/24035780
 """
-
 grammars = {
             "E":    ["T ET"],
             "ET":   ["+ T ET",
@@ -63,9 +58,6 @@ class Node:
 
     def build_ast(self, tokens: list, token_index=0):
         for grammar in grammars[self.type]:
-            # print(grammar)
-            # print(tokens)
-            # print("\n")
             offset = 0
             grammar_tokens = grammar.split()
             try:
@@ -89,7 +81,7 @@ class Node:
                 else:
                     self.child = tmp_nodes
                     return offset
-            except ValueError or IndexError:
+            except ValueError:
                 pass
         raise ValueError("Error Grammar")
 
