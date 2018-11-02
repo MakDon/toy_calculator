@@ -7,9 +7,11 @@
 //
 
 #include <iostream>
+#include "Calculator.h"
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
-    return 0;
+    Calculator calculator = Calculator();
+    string raw ="12+23+34.56-\n76+4.5";
+    double result = calculator.calculate(raw);
+    std::cout<<result;
 }

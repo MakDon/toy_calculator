@@ -4,7 +4,7 @@ import re
 class Tokenizer:
     def __init__(self):
         self.token_table = {
-            "NUMBER": r"[0-9]+",
+            "NUMBER": r"([0-9]\.)?[0-9]+",
             "+": r"\+",
             "-": r"-",
             "*": r"\*",
@@ -23,6 +23,9 @@ class Tokenizer:
                     if typ != "SEPARATOR":
                         tokens.append([typ, token_text])
                     raw = raw[len(token_text):]
+                    break
+            else:
+                raise ValueError("Unknown Token")
         return tokens
 
 

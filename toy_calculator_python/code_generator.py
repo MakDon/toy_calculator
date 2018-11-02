@@ -22,7 +22,7 @@ def generate(ast_node: Node):
 
     elif ast_node.type == "ET" or ast_node.type == "TT":
         tmp = list()
-        if len(ast_node.child)>1:
+        if len(ast_node.child) > 1:
             tmp.extend(generate(ast_node.child[1]))
             tmp.extend(generate(ast_node.child[0]))
             tmp.extend(generate(ast_node.child[2]))
