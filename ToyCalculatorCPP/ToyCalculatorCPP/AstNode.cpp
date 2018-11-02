@@ -6,14 +6,17 @@
 //  Copyright © 2018 makdon. All rights reserved.
 //
 
-#include "AstNode.hpp"
+
 
 
 #include <string>
 #include <vector>
 #include <map>
 #include <regex>
-#include "Calculator.h"
+
+#include "AstNode.hpp"
+#include "structs.h"
+using namespace std;
 
 /*
  Expr      ->    Term ExprTail
@@ -55,7 +58,7 @@ vector<string> split(string s,char separator=' ')
     {
         if(s[index]==separator)
         {
-            result.push_back(string(s.begin()+begin, s.end()+index));
+            result.push_back(string(s.begin()+begin, s.begin()+index));
             begin = index+1;
         }
     }
@@ -69,21 +72,23 @@ vector<string> split(string s,char separator=' ')
 
 
 map<string, vector<string>> grammars = {
-    {"E",    {"T ET"}},
-    {"ET",   {"+ T ET",
-        "- T ET",
-        "null"},},
-    {"T",    {"F TT"},},
-    {"TT",   {"* F TT",
-        "/ F TT",
-        "null"}},
-    {"F",    {"BRA",
-        "NUMBER"}},
-    {"BRA",  {"LBRA E RBRA"}}
+    {"E",    {  "T ET"}},
+    {"ET",   {  "+ T ET",
+                "- T ET",
+                "null"},},
+    {"T",    {  "F TT"},},
+    {"TT",   {  "* F TT",
+                "/ F TT",
+                "null"}},
+    {"F",    {  "NUMBER",
+                "BRA",}},
+    {"BRA",  {  "LBRA E RBRA"}}
 };
 string end_state = "(null)|(NUMBER)|[+\\-*/]|(LBRA)|(RBRA)";
 
-int AstNode::build_ast(vector<Token>& tokens,int token_index=0)
+
+
+int AstNode::build_ast(const vector<Token>& tokens,int token_index=0)
 {
     if(regex_match(type, regex(end_state)))
     {
@@ -96,40 +101,37 @@ int AstNode::build_ast(vector<Token>& tokens,int token_index=0)
         }
         return 0;
     }
-    
-    /*
-     def build_ast(self, tokens: list, token_index=0):
-     for grammar in grammars[self.type]:
-     offset = 0
-     grammar_tokens = grammar.split()
-     try:
-     tmp_nodes = list()
-     for grammar_token in grammar_tokens:
-     node = Node(grammar_token)
-     tmp_nodes.append(node)
-     offset_ = node.build_ast(tokens, offset+token_index)
-     offset += offset_
-     else:
-     self.child = tmp_nodes
-     return offset
-     except ValueError:
-     pass
-     raise ValueError("Error Grammar")
-     */
-    
-    
-    
-    
-    
-    int offset = 0;
+
     vector<string> rules = grammars.at(type);
     for(auto rule:rules)
     {
+        int offset = 0;
         vector<string> elements = split(rule);
-        for(auto element:elements)
+        vector<AstNode> tmp_child_nodes = vector<AstNode>();
+        try
         {
-            AstNode node = AstNode(element);
+            for(auto element:elements)
+            {
+                AstNode node = AstNode(element);
+                offset += node.build_ast(tokens, offset+token_index);
+                tmp_child_nodes.push_back(node);
+            }
+            childs.insert(childs.end(), tmp_child_nodes.cbegin(), tmp_child_nodes.cend());
+            return offset;
+        } catch (const char* msg) {
             
         }
+        
     }
+    throw "Error Grammar";
+}
+
+bool AstNode::match_token(Token token)
+{
+    string token_type = token.type;
+    if(type == "null")
+        return true;
+    if(type == token_type)
+        return true;
+    return false;
 }

@@ -10,34 +10,20 @@
 #define Calculator_h
 #include <string>
 #include <vector>
+#include "AstNode.hpp"
 using namespace std;
 
 
-struct Instruction
-{
-    int opcode;
-    double operand;
-};
 
-struct Token
-{
-    string type;
-    string text;
-    Token(string typ, string txt)
-    {
-        type = typ;
-        text = txt;
-    }
-};
 
 
 
 class Calculator
 {
 public:
-    double calculate(string raw);
-    vector<Token> tokenize(string raw);
-    AstNode parse(vector<Token>&);
+    double calculate(const string& raw);
+    vector<Token> tokenize(const string& raw);
+    AstNode parse(const vector<Token>&);
     vector<Instruction> generate_instructions(AstNode);
     //double run_instructions(vector<Instruction>);
 };

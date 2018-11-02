@@ -11,6 +11,8 @@
 #include <regex>
 #include <map>
 #include "Calculator.h"
+#include "structs.h"
+#include "AstNode.hpp"
 using namespace std;
 
 map<string, string> token_patterns={
@@ -27,7 +29,7 @@ map<string, string> token_patterns={
 
 
 
-double Calculator::calculate(string raw)
+double Calculator::calculate(const string& raw)
 {
     vector<Token> tokens = tokenize(raw);
     AstNode root = parse(tokens);
@@ -37,7 +39,7 @@ double Calculator::calculate(string raw)
 }
 
 
-vector<Token> Calculator::tokenize(string raw)
+vector<Token> Calculator::tokenize(const string& raw)
 {
     vector<Token> tokens = vector<Token>();
     int offset = 0;
@@ -53,8 +55,11 @@ vector<Token> Calculator::tokenize(string raw)
             //if(regex_search(raw, match_result, regex(pattern_pair.second)))
             if(offset<raw.size() && regex_search(raw.cbegin()+offset, raw.cend(), match_result, pattern, regex_constants::match_not_null))
             {
-                Token token = Token(pattern_pair.first, match_result.str());
-                tokens.push_back(token);
+                if(pattern_pair.first!="SEPARATOR")
+                {
+                    Token token = Token(pattern_pair.first, match_result.str());
+                    tokens.push_back(token);
+                }
                 offset += match_result.str().size();
                 match_success_flag = true;
             }
@@ -63,10 +68,10 @@ vector<Token> Calculator::tokenize(string raw)
     return tokens;
 }
 
-
 AstNode Calculator::parse(const vector<Token>& tokens)
 {
-    AstNode root = AstNode();
+    AstNode root = AstNode("E");
+    root.build_ast(tokens, 0);
     return root;
     
 }
