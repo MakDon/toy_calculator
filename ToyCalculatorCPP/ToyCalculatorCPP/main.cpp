@@ -11,7 +11,17 @@
 
 int main(int argc, const char * argv[]) {
     Calculator calculator = Calculator();
-    string raw ="12+23+34.56-\n76+4.5";
-    double result = calculator.calculate(raw);
-    std::cout<<result;
+    
+    /*-----------test----------*/
+    assert(calculator.calculate("1+2+3")==6);
+    assert(calculator.calculate("1 + 2 + 3")==6);
+    assert(calculator.calculate("1+ 2+ 3")==6);
+    assert(calculator.calculate("1+2+3")==6);
+    assert(calculator.calculate("1+2-3")==0);
+    assert(calculator.calculate("1+2*3")==7);
+    assert(calculator.calculate("1+3/2")==2.5);
+    assert(calculator.calculate("1-2+3")==2);
+    assert(calculator.calculate("(1+2)*3")==9);
+    assert(calculator.calculate("1-(2+3)")==-4);
+    std::cout<<"success";
 }

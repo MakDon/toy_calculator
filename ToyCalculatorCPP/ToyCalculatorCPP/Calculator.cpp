@@ -26,7 +26,13 @@ map<string, string> token_patterns={
     {"SEPARATOR", "^( |\\n)"},
 };
 
-
+typedef double(*pDouble)(double);
+map<string, std::function<double(double&,double&)>> op_actions={
+    {"+",[](double& a, double& b){return a+b;}},
+    {"-",[](double& a, double& b){return a-b;}},
+    {"*",[](double& a, double& b){return a*b;}},
+    {"/",[](double& a, double& b){return a/b;}}
+};
 
 
 double Calculator::calculate(const string& raw)
@@ -34,8 +40,8 @@ double Calculator::calculate(const string& raw)
     vector<Token> tokens = tokenize(raw);
     AstNode root = parse(tokens);
     vector<Instruction> instructions = generate_instructions(root);
-    //double result = run_instructions(instructions);
-    return 0;
+    double result = run_instructions(instructions);
+    return result;
 }
 
 
@@ -75,13 +81,85 @@ AstNode Calculator::parse(const vector<Token>& tokens)
     return root;
     
 }
-vector<Instruction> Calculator::generate_instructions(AstNode)
+vector<Instruction> Calculator::generate_instructions(const AstNode& node)
 {
-    vector<Instruction> instructions = vector<Instruction>();
-    return instructions;
+    //vector<Instruction> instructions = vector<Instruction>();
+    if(node.type == "E" or node.type == "T" or node.type == "F" or node.type == "BRA")
+    {
+        vector<Instruction> instructions = vector<Instruction>();
+        for(auto child:node.childs)
+        {
+            vector<Instruction> tmp =generate_instructions(child);
+            instructions.insert(instructions.cend(), tmp.cbegin(), tmp.cend());
+        }
+        return instructions;
+    }
+    
+    else if(node.type == "ET" or node.type == "TT")
+    {
+        vector<Instruction> instructions = vector<Instruction>();
+        if(node.childs.size()>1)
+        {
+            vector<Instruction> tmp =generate_instructions(node.childs.at(1));
+            instructions.insert(instructions.cend(), tmp.cbegin(), tmp.cend());
+            tmp =generate_instructions(node.childs.at(0));
+            instructions.insert(instructions.cend(), tmp.cbegin(), tmp.cend());
+            tmp =generate_instructions(node.childs.at(2));
+            instructions.insert(instructions.cend(), tmp.cbegin(), tmp.cend());
+        }
+        return instructions;
+    }
+    
+    else if(node.type == "LBRA" or node.type == "RBRA")
+    {
+        return vector<Instruction>();
+    }
+    
+    else if(node.type == "NUMBER")
+    {
+        vector<Instruction> instructions={
+            Instruction("PUSH", node.text)
+        };
+        return instructions;
+    }
+    
+    else
+    {
+        vector<Instruction> instructions={
+            Instruction(node.text, node.text)
+        };
+        return instructions;
+    }
+    //return vector<Instruction>();
 }
 
-//double run_instructions(vector<Instruction>)
-//{
-//    return 0;
-//}
+double Calculator::run_instructions(const vector<Instruction>& instructions)
+{
+    vector<double> stack = vector<double>();
+    for(auto instruction:instructions)
+    {
+        if(instruction.opcode=="PUSH")
+        {
+            stack.push_back(stod(instruction.operand));
+        }
+        else
+        {
+            
+            double b = stack.at(stack.size()-1);
+            double a = stack.at(stack.size()-2);
+            double tmp = op_actions.at(instruction.opcode)(a, b);
+            stack.pop_back();
+            stack.pop_back();
+            stack.push_back(tmp);
+        }
+    }
+    if(stack.size()==1)
+    {
+        return stack[0];
+    }
+    else
+    {
+        throw "More than 1 frame in stack";
+    }
+    return 0;
+}

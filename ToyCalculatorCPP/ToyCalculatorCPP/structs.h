@@ -8,10 +8,16 @@
 
 #ifndef structs_h
 #define structs_h
+#include <string>
 struct Instruction
 {
-    int opcode;
-    double operand;
+    std::string opcode;
+    std::string operand;
+    Instruction(std::string opc, std::string ope=NULL)
+    {
+        opcode = opc;
+        operand = ope;
+    }
 };
 
 struct Token

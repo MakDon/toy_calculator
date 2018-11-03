@@ -14,7 +14,8 @@ class Instruction:
 
 
 def generate(ast_node: Node):
-    if ast_node.type == "E" or ast_node.type == "T":
+    if ast_node.type == "E" or ast_node.type == "T" or\
+       ast_node.type == "BRA" or ast_node.type == 'F':
         tmp = list()
         for child in ast_node.child:
             tmp.extend(generate(child))
@@ -28,18 +29,8 @@ def generate(ast_node: Node):
             tmp.extend(generate(ast_node.child[2]))
         return tmp
 
-    elif ast_node.type == 'F':
-        return generate(ast_node.child[0])
-
-    elif ast_node.type == "BRA":
-        tmp = list()
-        for child in ast_node.child:
-            child_code = generate(child)
-            if child_code is not None:
-                tmp.extend(generate(child))
-
     elif ast_node.type == "LBRA" or ast_node.type == 'RBRA':
-        return None
+        return list()
 
     elif ast_node.type == "NUMBER":
         tmp = list()

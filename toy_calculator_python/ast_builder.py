@@ -25,8 +25,8 @@ grammars = {
             "TT":   ["* F TT",
                      "/ F TT",
                      "null",],
-            "F":    ["BRA",
-                     "NUMBER"],
+            "F":    ["NUMBER",
+                     "BRA"],
             "BRA":  ["LBRA E RBRA",],
             "END_STATE": r"(null)|(NUMBER)|[+\-*/]|(LBRA)|(RBRA)"
 }
@@ -57,6 +57,37 @@ class Node:
         self.child = list()
 
     def build_ast(self, tokens: list, token_index=0):
+
+        if re.match(grammars["END_STATE"], self.type):
+            if self.type != "null":
+                if token_index >= len(tokens):
+                    raise ValueError("Error Grammar")
+                if self.match_token(tokens[token_index]):
+                    self.text = tokens[token_index][1]
+                else:
+                    raise ValueError("Error Grammar")
+                return 1
+            return 0
+
+        for grammar in grammars[self.type]:
+            offset = 0
+            grammar_tokens = grammar.split()
+            tmp_nodes = list()
+            try:
+                for grammar_token in grammar_tokens:
+                    node = Node(grammar_token)
+                    tmp_nodes.append(node)
+                    offset += node.build_ast(tokens, offset+token_index)
+                else:
+                    self.child = tmp_nodes
+                    return offset
+            except ValueError:
+                pass
+        raise ValueError("Error Grammar")
+
+    """
+    # previous version:
+    def build_ast(self, tokens: list, token_index=0):
         for grammar in grammars[self.type]:
             offset = 0
             grammar_tokens = grammar.split()
@@ -83,7 +114,7 @@ class Node:
                     return offset
             except ValueError:
                 pass
-        raise ValueError("Error Grammar")
+        raise ValueError("Error Grammar")"""
 
     def __str__(self):
         childs = list()

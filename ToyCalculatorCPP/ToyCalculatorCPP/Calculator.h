@@ -24,7 +24,7 @@ public:
     double calculate(const string& raw);
     vector<Token> tokenize(const string& raw);
     AstNode parse(const vector<Token>&);
-    vector<Instruction> generate_instructions(AstNode);
-    //double run_instructions(vector<Instruction>);
+    vector<Instruction> generate_instructions(const AstNode&);
+    double run_instructions(const vector<Instruction>&);
 };
 #endif /* Calculator_h */
