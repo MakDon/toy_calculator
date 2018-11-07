@@ -33,6 +33,8 @@ grammars = {
 
 
 def build_ast(tokens):
+    # Error: this function only builds a parse tree instead of an AST
+    # but i am not going to fix it because it is just a naming error
     root = Node("E")
     offset = root.build_ast(tokens, token_index=0)
     if offset == len(tokens):

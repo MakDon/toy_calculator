@@ -38,6 +38,8 @@ map<string, std::function<double(double&,double&)>> op_actions={
 double Calculator::calculate(const string& raw)
 {
     vector<Token> tokens = tokenize(raw);
+    // Error: It only builds a parse tree instead of an AST
+    // but i am not going to fix it because it is just a naming error
     AstNode root = parse(tokens);
     vector<Instruction> instructions = generate_instructions(root);
     double result = run_instructions(instructions);
