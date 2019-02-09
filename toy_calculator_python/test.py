@@ -10,6 +10,10 @@ class TestCalculator(unittest.TestCase):
         question = "1+2+3+5+7"
         self.assertEqual(calculator.calculate(question), eval(question))
 
+    def test_calculate01(self):
+        question = "11.5+12.5+3+5+7"
+        self.assertEqual(calculator.calculate(question), eval(question))
+
     def test_calculate1(self):
         question = "1 + 2 + 3"
         self.assertEqual(calculator.calculate(question), eval(question))
