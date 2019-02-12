@@ -4,7 +4,7 @@ import re
 class Tokenizer:
     def __init__(self):
         self.token_table = {
-            "NUMBER": r"([0-9]\.)?[0-9]+",
+            "NUMBER": r"([0-9]+\.)?[0-9]+",
             "+": r"\+",
             "-": r"-",
             "*": r"\*",
