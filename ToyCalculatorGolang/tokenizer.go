@@ -13,27 +13,6 @@ type tokenizer interface {
 var nums = map[byte]struct{}{'0': {}, '1': {}, '2': {}, '3': {}, '4': {},
 	'5': {}, '6': {}, '7': {}, '8': {}, '9': {}}
 
-const (
-	tokenTypeUnknown = iota
-
-	tokenTypeNumber
-
-	tokenTypePlus
-	tokenTypeMinus
-	tokenTypeMultiply
-	tokenTypeDivide
-
-	tokenTypeLPar
-	tokenTypeRPar
-)
-
-type token struct {
-	t      int
-	s      []byte
-	hasDot bool
-	value  float64
-}
-
 type toyTokenizer struct {
 }
 
