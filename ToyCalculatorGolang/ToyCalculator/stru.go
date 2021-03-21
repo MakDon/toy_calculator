@@ -21,6 +21,20 @@ const (
 	tokenTypeRPar
 )
 
+var tokenTypeToString = map[int]string{
+	tokenTypeUnknown: "unknown",
+
+	tokenTypeNumber: "num",
+
+	tokenTypePlus:     "+",
+	tokenTypeMinus:    "-",
+	tokenTypeMultiply: "*",
+	tokenTypeDivide:   "/",
+
+	tokenTypeLPar: "(",
+	tokenTypeRPar: ")",
+}
+
 type node struct {
 	t        string
 	children []*node

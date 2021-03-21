@@ -58,8 +58,8 @@ func (t *toyTokenizer) tokenize(raw []byte) ([]token, error) {
 	}
 	return tokens, nil
 }
-func (t *token) String() {
-
+func (t token) DebugString() string {
+	return fmt.Sprintf("%d, %f", t.t, t.value)
 }
 
 func (t *token) isEqual(target *token) bool {
